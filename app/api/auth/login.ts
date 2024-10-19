@@ -11,6 +11,19 @@ export const loginUserAPI = async ({
       email,
       password,
     });
+
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (!data.user) {
+      throw new Error("User not found");
+    }
+
+    return {
+      id: data.user.id,
+      email: data.user.email ?? "",
+    };
   } catch (error) {
     throw new Error("Unexpected error: " + error);
   }

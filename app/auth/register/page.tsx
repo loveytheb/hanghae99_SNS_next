@@ -56,57 +56,55 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <AuthForm
-        title="계정을 생성하세요."
-        fields={[
-          {
-            placeholder: "이름",
-            id: "name",
-            type: "text",
-            value: name,
-            onChange: (e) => setName(e.target.value),
-          },
-          {
-            placeholder: "닉네임",
-            id: "displayName",
-            type: "text",
-            value: displayName,
-            onChange: (e) => setDisplayName(e.target.value),
-          },
-          {
-            placeholder: "이메일",
-            id: "email",
-            type: "email",
-            value: email,
-            onChange: (e) => setEmail(e.target.value),
-          },
-          {
-            placeholder: "비밀번호",
-            id: "password",
-            type: "password",
-            value: password,
-            onChange: (e) => setPassword(e.target.value),
-          },
-          {
-            placeholder: "비밀번호 확인",
-            id: "confirmPassword",
-            type: "password",
-            value: confirmPassword,
-            onChange: (e) => setConfirmPassword(e.target.value),
-          },
-          {
-            placeholder: "인사말",
-            id: "message",
-            type: "text",
-            value: message,
-            onChange: (e) => setMessage(e.target.value),
-          },
-        ]}
-        buttonLabel="가입하기"
-        onSubmit={handleSubmit}
-      />
-    </div>
+    <AuthForm
+      title="계정을 생성하세요."
+      fields={[
+        {
+          placeholder: "이름",
+          id: "name",
+          type: "text",
+          value: name,
+          onChange: (e) => setName(e.target.value),
+        },
+        {
+          placeholder: "닉네임",
+          id: "displayName",
+          type: "text",
+          value: displayName,
+          onChange: (e) => setDisplayName(e.target.value),
+        },
+        {
+          placeholder: "이메일",
+          id: "email",
+          type: "email",
+          value: email,
+          onChange: (e) => setEmail(e.target.value),
+        },
+        {
+          placeholder: "비밀번호",
+          id: "password",
+          type: "password",
+          value: password,
+          onChange: (e) => setPassword(e.target.value),
+        },
+        {
+          placeholder: "비밀번호 확인",
+          id: "confirmPassword",
+          type: "password",
+          value: confirmPassword,
+          onChange: (e) => setConfirmPassword(e.target.value),
+        },
+        {
+          placeholder: "인사말",
+          id: "message",
+          type: "text",
+          value: message,
+          onChange: (e) => setMessage(e.target.value),
+        },
+      ]}
+      buttonLabel="가입하기"
+      onSubmit={handleSubmit}
+    />
   );
 };
 
