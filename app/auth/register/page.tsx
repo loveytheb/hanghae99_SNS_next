@@ -58,45 +58,45 @@ const Page = () => {
   return (
     <div>
       <AuthForm
-        title="회원가입"
+        title="계정을 생성하세요."
         fields={[
           {
-            label: "이름",
+            placeholder: "이름",
             id: "name",
             type: "text",
             value: name,
             onChange: (e) => setName(e.target.value),
           },
           {
-            label: "닉네임",
+            placeholder: "닉네임",
             id: "displayName",
             type: "text",
             value: displayName,
             onChange: (e) => setDisplayName(e.target.value),
           },
           {
-            label: "이메일",
+            placeholder: "이메일",
             id: "email",
             type: "email",
             value: email,
             onChange: (e) => setEmail(e.target.value),
           },
           {
-            label: "비밀번호",
+            placeholder: "비밀번호",
             id: "password",
             type: "password",
             value: password,
             onChange: (e) => setPassword(e.target.value),
           },
           {
-            label: "비밀번호 확인",
+            placeholder: "비밀번호 확인",
             id: "confirmPassword",
             type: "password",
             value: confirmPassword,
             onChange: (e) => setConfirmPassword(e.target.value),
           },
           {
-            label: "인사말",
+            placeholder: "인사말",
             id: "message",
             type: "text",
             value: message,
