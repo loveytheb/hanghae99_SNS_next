@@ -1,26 +1,24 @@
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import supabase from "@/src/utils/supabase/supabase";
 import { GoogleLoginUserAPI } from "@/app/api/auth/socialLogin";
 import React from "react";
+import { useRouter } from "next/navigation";
 
 const SocialButtons: React.FC = () => {
-  const router = useRouter();
+  const route = useRouter();
 
   useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_IN") {
-          console.log("로그인 성공, 사용자 세션:", session);
-          router.push("/auth/login");
-        }
+    const fetchGoogleAuthListener = async () => {
+      try {
+        const response = await fetch("/api/auth");
+        const data = await response.json();
+        console.log("Auth listener response:", data.message);
+        route.push("/auth/login");
+      } catch (error) {
+        console.error("Error fetching Google Auth Listener:", error);
       }
-    );
-
-    return () => {
-      authListener?.subscription?.unsubscribe();
     };
-  }, [router]);
+    fetchGoogleAuthListener();
+  }, []);
 
   const handleGoogleLogin = async () => {
     try {
