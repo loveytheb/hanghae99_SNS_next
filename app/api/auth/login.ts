@@ -1,6 +1,6 @@
-import { IUser } from "@/types/authType";
+import { IUser } from "@/src/types/authType";
 import { loginUserDTO } from "../dtos/authDTO";
-import supabase from "@/app/utils/supabase/supabase";
+import supabase from "@/src/utils/supabase/supabase";
 
 export const loginUserAPI = async ({
   email,

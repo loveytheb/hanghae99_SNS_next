@@ -1,7 +1,7 @@
-import { IUser } from "@/types/authType";
 import { RegisterUserReqDTO } from "../dtos/authDTO";
-import supabase from "@/app/utils/supabase/supabase";
-import { DEFAULT_PROFILE_IMAGE_URL } from "@/app/constants/constants";
+import supabase from "@/src/utils/supabase/supabase";
+import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
+import { IUser } from "@/src/types/authType";
 
 // 회원가입 API
 export const registerUserAPI = async ({

@@ -1,13 +1,13 @@
 "use client";
 
 import { registerUserAPI } from "@/app/api/auth/register";
-import AuthForm from "@/app/components/AuthForm/AuthForm";
+import AuthForm from "@/src/components/AuthForm/AuthForm";
 import {
   isValidEmail,
   isValidPassword,
   isValidMessage,
   isValidDisplayname,
-} from "@/app/utils/supabase/validation";
+} from "@/src/utils/supabase/validation";
 import React, { useState } from "react";
 
 const Page = () => {

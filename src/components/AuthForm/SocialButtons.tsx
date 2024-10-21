@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import supabase from "@/app/utils/supabase/supabase";
+import supabase from "@/src/utils/supabase/supabase";
 import { GoogleLoginUserAPI } from "@/app/api/auth/socialLogin";
 import React from "react";
 

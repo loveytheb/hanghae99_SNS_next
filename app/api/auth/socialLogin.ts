@@ -1,6 +1,6 @@
-import supabase from "@/app/utils/supabase/supabase";
+import supabase from "@/src/utils/supabase/supabase";
 import { googleLoginUserDTO } from "../dtos/authDTO";
-import { DEFAULT_PROFILE_IMAGE_URL } from "@/app/constants/constants";
+import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
 
 // 구글 로그인 API
 export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
