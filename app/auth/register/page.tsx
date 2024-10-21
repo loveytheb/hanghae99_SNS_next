@@ -1,7 +1,7 @@
 "use client";
 
 import { registerUserAPI } from "@/app/api/auth/register";
-import AuthForm from "@/app/components/AuthForm";
+import AuthForm from "@/app/components/AuthForm/AuthForm";
 import {
   isValidEmail,
   isValidPassword,
@@ -57,7 +57,7 @@ const Page = () => {
 
   return (
     <AuthForm
-      title="계정을 생성하세요."
+      title="TAP 가입하기"
       fields={[
         {
           placeholder: "이름",

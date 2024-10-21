@@ -1,4 +1,5 @@
 import React from "react";
+import SocialButtons from "./SocialButtons";
 
 interface Field {
   placeholder: string;
@@ -13,6 +14,7 @@ interface AuthFormProps {
   fields: Field[];
   buttonLabel: string;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  showSocialButtons?: boolean;
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({
@@ -20,10 +22,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
   fields,
   buttonLabel,
   onSubmit,
+  showSocialButtons = false,
 }) => {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-400">
-      <div className="bg-white p-8 rounded-xl shadow-lg w-[450px] min-h-[550px] flex flex-col items-center justify-center">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-[450px] max-h-[550px] flex flex-col items-center justify-center">
         <h1 className="text-center text-2xl font-semibold mb-7">{title}</h1>
         <form
           onSubmit={onSubmit}
@@ -45,11 +48,12 @@ const AuthForm: React.FC<AuthFormProps> = ({
           ))}
           <button
             type="submit"
-            className="max-w-[300px] w-full mx-auto mt-40 bg-black text-white py-2 rounded-full hover:bg-gray-800 transition duration-300"
+            className="max-w-[300px] w-full mx-auto mt-4 bg-black text-white py-2 rounded-full hover:bg-gray-800 transition duration-300"
           >
             {buttonLabel}
           </button>
         </form>
+        {showSocialButtons && <SocialButtons />}
       </div>
     </div>
   );

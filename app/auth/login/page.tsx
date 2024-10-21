@@ -1,7 +1,7 @@
 "use client";
 
 import { loginUserAPI } from "@/app/api/auth/login";
-import AuthForm from "@/app/components/AuthForm";
+import AuthForm from "@/app/components/AuthForm/AuthForm";
 import { isValidEmail, isValidPassword } from "@/app/utils/supabase/validation";
 import React, { useState } from "react";
 
@@ -28,7 +28,7 @@ const Page = () => {
   };
   return (
     <AuthForm
-      title="로그인하세요"
+      title="TAP 로그인하기"
       fields={[
         {
           placeholder: "이메일",
@@ -47,6 +47,7 @@ const Page = () => {
       ]}
       buttonLabel="로그인하기"
       onSubmit={handleSubmit}
+      showSocialButtons={true}
     />
   );
 };

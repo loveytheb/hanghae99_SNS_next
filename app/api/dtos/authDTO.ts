@@ -10,3 +10,8 @@ export interface loginUserDTO {
   email: string;
   password: string;
 }
+
+export interface googleLoginUserDTO {
+  success: boolean;
+  message?: string;
+}
