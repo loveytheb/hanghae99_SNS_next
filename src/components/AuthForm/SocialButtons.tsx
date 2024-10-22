@@ -18,7 +18,7 @@ const SocialButtons: React.FC = () => {
       }
     };
     fetchGoogleAuthListener();
-  }, []);
+  }, [route]);
 
   const handleGoogleLogin = async () => {
     try {

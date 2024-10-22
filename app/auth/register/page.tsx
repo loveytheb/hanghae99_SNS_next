@@ -7,7 +7,7 @@ import {
   isValidPassword,
   isValidMessage,
   isValidDisplayname,
-} from "@/src/utils/supabase/validation";
+} from "@/src/utils/validation";
 import React, { useState } from "react";
 
 const Page = () => {

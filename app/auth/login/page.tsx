@@ -2,7 +2,7 @@
 
 import { loginUserAPI } from "@/app/api/auth/login";
 import AuthForm from "@/src/components/AuthForm/AuthForm";
-import { isValidEmail, isValidPassword } from "@/src/utils/supabase/validation";
+import { isValidEmail, isValidPassword } from "@/src/utils/validation";
 import React, { useState } from "react";
 
 const Page = () => {

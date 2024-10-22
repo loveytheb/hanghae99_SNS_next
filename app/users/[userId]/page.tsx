@@ -12,7 +12,7 @@ const UserPage = () => {
     if (userId) {
       router.push(`/mypage/${userId}`);
     }
-  }, [userId]);
+  }, [userId, router]);
 
   return (
     <div>
