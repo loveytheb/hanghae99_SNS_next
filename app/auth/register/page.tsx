@@ -2,40 +2,54 @@
 
 import { registerUserAPI } from "@/app/api/auth/register";
 import AuthForm from "@/src/components/AuthForm/AuthForm";
+import { useAuthStore } from "@/src/store/auth/authStore";
+import { Field } from "@/src/types/authType";
 import {
   isValidEmail,
   isValidPassword,
   isValidMessage,
   isValidDisplayname,
 } from "@/src/utils/validation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const Page = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [message, setMessage] = useState("");
+const RegisterPage = () => {
+  const authStore = useAuthStore();
+  const {
+    name,
+    email,
+    password,
+    confirmPassword,
+    displayName,
+    message,
+    reset,
+  } = authStore;
+
+  const [isFormValid, setIsFormValid] = useState(false);
+
+  useEffect(() => {
+    const validateInputs = () => {
+      const isDisplayNameValid = isValidDisplayname(displayName);
+      const isEmailValid = isValidEmail(email);
+      const isPasswordValid = isValidPassword(password);
+      const isMessageValid = isValidMessage(message);
+      const isPasswordMatch = password === confirmPassword;
+
+      return (
+        isDisplayNameValid &&
+        isEmailValid &&
+        isPasswordValid &&
+        isMessageValid &&
+        isPasswordMatch
+      );
+    };
+
+    setIsFormValid(validateInputs());
+  }, [name, email, password, confirmPassword, displayName, message]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
-      if (!isValidDisplayname(displayName)) {
-        throw new Error("2글자 이상 입력해주세요.");
-      } else if (!isValidEmail(email)) {
-        throw new Error("유효하지 않는 이메일 형식입니다.");
-      } else if (!isValidPassword(password)) {
-        throw new Error("유효하지 않는 비밀번호 형식입니다.");
-      } else if (!isValidMessage(message)) {
-        throw new Error("10글자 이상 입력해주세요.");
-      }
-
-      if (password !== confirmPassword) {
-        throw new Error("비밀번호가 일치하지 않습니다.");
-      }
-
       await registerUserAPI({
         name,
         email,
@@ -43,69 +57,66 @@ const Page = () => {
         display_name: displayName,
         message,
       });
-
-      setName("");
-      setEmail("");
-      setPassword("");
-      setConfirmPassword("");
-      setDisplayName("");
-      setMessage("");
+      reset();
     } catch (error) {
       console.error(error);
     }
   };
 
+  const fields: Field[] = [
+    {
+      placeholder: "이름",
+      id: "name",
+      type: "text",
+      value: name,
+      onChange: (e) => authStore.setName(e.target.value),
+    },
+    {
+      placeholder: "닉네임",
+      id: "displayName",
+      type: "text",
+      value: displayName,
+      onChange: (e) => authStore.setDisplayName(e.target.value),
+    },
+    {
+      placeholder: "이메일",
+      id: "email",
+      type: "email",
+      value: email,
+      onChange: (e) => authStore.setEmail(e.target.value),
+    },
+    {
+      placeholder: "비밀번호",
+      id: "password",
+      type: "password",
+      value: password,
+      onChange: (e) => authStore.setPassword(e.target.value),
+    },
+    {
+      placeholder: "비밀번호 확인",
+      id: "confirmPassword",
+      type: "password",
+      value: confirmPassword,
+      onChange: (e) => authStore.setConfirmPassword(e.target.value),
+    },
+    {
+      placeholder: "인사말",
+      id: "message",
+      type: "text",
+      value: message,
+      onChange: (e) => authStore.setMessage(e.target.value),
+    },
+  ];
+
   return (
     <AuthForm
       title="TAP 가입하기"
-      fields={[
-        {
-          placeholder: "이름",
-          id: "name",
-          type: "text",
-          value: name,
-          onChange: (e) => setName(e.target.value),
-        },
-        {
-          placeholder: "닉네임",
-          id: "displayName",
-          type: "text",
-          value: displayName,
-          onChange: (e) => setDisplayName(e.target.value),
-        },
-        {
-          placeholder: "이메일",
-          id: "email",
-          type: "email",
-          value: email,
-          onChange: (e) => setEmail(e.target.value),
-        },
-        {
-          placeholder: "비밀번호",
-          id: "password",
-          type: "password",
-          value: password,
-          onChange: (e) => setPassword(e.target.value),
-        },
-        {
-          placeholder: "비밀번호 확인",
-          id: "confirmPassword",
-          type: "password",
-          value: confirmPassword,
-          onChange: (e) => setConfirmPassword(e.target.value),
-        },
-        {
-          placeholder: "인사말",
-          id: "message",
-          type: "text",
-          value: message,
-          onChange: (e) => setMessage(e.target.value),
-        },
-      ]}
+      fields={fields}
       buttonLabel="가입하기"
       onSubmit={handleSubmit}
+      buttonDisabled={!isFormValid}
     />
   );
 };
 
-export default Page;
+export default RegisterPage;
