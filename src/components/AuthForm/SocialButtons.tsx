@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { GoogleLoginUserAPI } from "@/app/api/auth/socialLogin";
+
 import React from "react";
 import { useRouter } from "next/navigation";
+import { GoogleLoginUserAPI } from "@/src/app/api/auth/socialLogin";
 
 const SocialButtons: React.FC = () => {
   const route = useRouter();

@@ -1,11 +1,11 @@
 "use client";
 
-import { loginUserAPI } from "@/app/api/auth/login";
 import AuthForm from "@/src/components/AuthForm/AuthForm";
 import { useAuthStore } from "@/src/store/auth/authStore";
 import { Field } from "@/src/types/authType";
 import { isValidEmail, isValidPassword } from "@/src/utils/validation";
 import React from "react";
+import { loginUserAPI } from "../../api/auth/login";
 
 const LoginPage = () => {
   const authStore = useAuthStore();

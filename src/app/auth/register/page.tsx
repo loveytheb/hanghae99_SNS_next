@@ -1,6 +1,5 @@
 "use client";
 
-import { registerUserAPI } from "@/app/api/auth/register";
 import AuthForm from "@/src/components/AuthForm/AuthForm";
 import { useAuthStore } from "@/src/store/auth/authStore";
 import { Field } from "@/src/types/authType";
@@ -11,6 +10,7 @@ import {
   isValidDisplayname,
 } from "@/src/utils/validation";
 import React, { useEffect, useState } from "react";
+import { registerUserAPI } from "../../api/auth/register";
 
 const RegisterPage = () => {
   const authStore = useAuthStore();
