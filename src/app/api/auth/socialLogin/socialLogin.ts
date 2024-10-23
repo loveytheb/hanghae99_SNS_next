@@ -1,5 +1,5 @@
 import supabase from "@/src/utils/supabase/supabase";
-import { googleLoginUserDTO } from "../dtos/authDTO";
+import { googleLoginUserDTO } from "../../dtos/authDTO";
 import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
 
 // 구글 로그인 API

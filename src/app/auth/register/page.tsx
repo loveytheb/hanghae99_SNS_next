@@ -10,7 +10,7 @@ import {
   isValidDisplayname,
 } from "@/src/utils/validation";
 import React, { useEffect, useState } from "react";
-import { registerUserAPI } from "../../api/auth/register";
+import { registerUserAPI } from "../../api/auth/register/register";
 
 const RegisterPage = () => {
   const authStore = useAuthStore();

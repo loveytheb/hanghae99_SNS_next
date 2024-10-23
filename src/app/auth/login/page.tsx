@@ -5,7 +5,7 @@ import { useAuthStore } from "@/src/store/auth/authStore";
 import { Field } from "@/src/types/authType";
 import { isValidEmail, isValidPassword } from "@/src/utils/validation";
 import React from "react";
-import { loginUserAPI } from "../../api/auth/login";
+import { loginUserAPI } from "../../api/auth/login/route";
 
 const LoginPage = () => {
   const authStore = useAuthStore();
