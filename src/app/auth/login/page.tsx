@@ -5,7 +5,6 @@ import { useAuthStore } from "@/src/store/auth/authStore";
 import { Field } from "@/src/types/authType";
 import { isValidEmail, isValidPassword } from "@/src/utils/validation";
 import React from "react";
-import { loginUserAPI } from "../../api/auth/login/route";
 
 const LoginPage = () => {
   const authStore = useAuthStore();
@@ -26,13 +25,25 @@ const LoginPage = () => {
     }
 
     try {
-      validateInputs();
-      await loginUserAPI({ email, password });
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!res.ok) {
+        throw new Error("로그인 실패");
+      }
+
+      const data = await res.json();
+
       setIsLoggedIn(true);
       reset();
-      console.log("로그인 성공");
+      console.log("로그인 성공", data);
     } catch (error) {
-      console.error(error);
+      console.error("로그인 중 오류 발생:", error);
     }
   };
 

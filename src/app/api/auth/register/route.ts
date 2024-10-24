@@ -1,17 +1,15 @@
-import { RegisterUserReqDTO } from "../../dtos/authDTO";
+import { NextRequest, NextResponse } from "next/server";
 import supabase from "@/src/utils/supabase/supabase";
 import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
 import { IUser } from "@/src/types/authType";
+import { RegisterUserReqDTO } from "../../dtos/authDTO";
 
-// 회원가입 API
-export const registerUserAPI = async ({
-  name,
-  email,
-  password,
-  display_name,
-  message,
-}: RegisterUserReqDTO): Promise<IUser> => {
+// 회원가입 API 핸들러
+export const POST = async (req: NextRequest) => {
   try {
+    const { name, email, password, display_name, message }: RegisterUserReqDTO =
+      await req.json();
+
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -27,15 +25,21 @@ export const registerUserAPI = async ({
 
     if (error) {
       if (error.message === "User already registered") {
-        throw new Error("사용 중인 이메일입니다.");
+        return NextResponse.json(
+          { message: "사용 중인 이메일입니다." },
+          { status: 400 }
+        );
       } else {
-        throw new Error(error.message);
+        return NextResponse.json({ message: error.message }, { status: 400 });
       }
     }
 
     const user = data.user;
     if (!user) {
-      throw new Error("사용자 등록에 실패했습니다.");
+      return NextResponse.json(
+        { message: "사용자 등록에 실패했습니다." },
+        { status: 500 }
+      );
     }
 
     const { error: dbError } = await supabase.from("users_info").insert([
@@ -47,20 +51,28 @@ export const registerUserAPI = async ({
     ]);
 
     if (dbError) {
-      throw new Error(
-        "사용자 정보를 저장하는 데 실패했습니다.: " + dbError.message
+      return NextResponse.json(
+        {
+          message: "사용자 정보를 저장하는 데 실패했습니다: " + dbError.message,
+        },
+        { status: 500 }
       );
     }
 
-    return {
+    const responseData: IUser = {
       id: user.id,
       name,
-      email: user.email,
+      email: user.email || "",
       display_name,
       message,
       profile_image: DEFAULT_PROFILE_IMAGE_URL,
-    } as IUser;
+    };
+
+    return NextResponse.json(responseData);
   } catch (error) {
-    throw new Error("Unexpected error: " + error);
+    return NextResponse.json(
+      { message: "Unexpected error: " + error },
+      { status: 500 }
+    );
   }
 };

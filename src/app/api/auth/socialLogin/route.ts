@@ -1,9 +1,10 @@
+import { NextResponse } from "next/server";
 import supabase from "@/src/utils/supabase/supabase";
 import { googleLoginUserDTO } from "../../dtos/authDTO";
 import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
 
 // 구글 로그인 API
-export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
+export const POST = async (): Promise<NextResponse<googleLoginUserDTO>> => {
   try {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -17,23 +18,22 @@ export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
     });
 
     if (error) {
-      return {
+      return NextResponse.json({
         success: false,
         message: error.message || "구글 로그인에 실패했습니다.",
-      };
+      });
     }
 
     const { data } = await supabase.auth.getSession();
     const user = data.session?.user;
 
     if (!user) {
-      return {
+      return NextResponse.json({
         success: false,
         message: "사용자 정보를 가져오지 못했습니다.",
-      };
+      });
     }
 
-    // 사용자의 정보를 확인하여 삽입 또는 업데이트
     const { data: existingUser } = await supabase
       .from("users_info")
       .select("*")
@@ -41,7 +41,6 @@ export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
       .single();
 
     if (existingUser) {
-      // 기존 사용자 정보가 있으면 업데이트
       const { error: updateError } = await supabase
         .from("users_info")
         .update({
@@ -51,15 +50,14 @@ export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
         .eq("id", user.id);
 
       if (updateError) {
-        return {
+        return NextResponse.json({
           success: false,
           message:
             "사용자 정보를 업데이트하는 데 실패했습니다: " +
             updateError.message,
-        };
+        });
       }
     } else {
-      // 새로운 사용자 정보 추가
       const { error: insertError } = await supabase.from("users_info").insert([
         {
           id: user.id,
@@ -69,22 +67,22 @@ export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
       ]);
 
       if (insertError) {
-        return {
+        return NextResponse.json({
           success: false,
           message:
             "사용자 정보를 저장하는 데 실패했습니다: " + insertError.message,
-        };
+        });
       }
     }
 
-    return {
+    return NextResponse.json({
       success: true,
       message: "구글 로그인에 성공하였습니다.",
-    };
+    });
   } catch (error) {
-    return {
+    return NextResponse.json({
       success: false,
       message: "Unexpected error: " + (error as Error).message,
-    };
+    });
   }
 };
