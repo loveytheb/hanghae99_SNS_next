@@ -10,7 +10,6 @@ import {
   isValidDisplayname,
 } from "@/src/utils/validation";
 import React, { useEffect, useState } from "react";
-import { registerUserAPI } from "../../api/auth/register/route";
 
 const RegisterPage = () => {
   const authStore = useAuthStore();
@@ -50,16 +49,31 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      await registerUserAPI({
-        name,
-        email,
-        password,
-        display_name: displayName,
-        message,
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          display_name: displayName,
+          message,
+        }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Error:", errorData.message);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("회원가입 성공:", data);
       reset();
     } catch (error) {
-      console.error(error);
+      console.error("회원가입 중 오류 발생:", error);
     }
   };
 

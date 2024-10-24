@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-
 import React from "react";
 import { useRouter } from "next/navigation";
-import { GoogleLoginUserAPI } from "@/src/app/api/auth/socialLogin/route";
 
 const SocialButtons: React.FC = () => {
   const route = useRouter();
@@ -23,10 +21,21 @@ const SocialButtons: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const response = await GoogleLoginUserAPI();
-      console.log("GoogleLoginUserAPI 응답:", response);
-      if (!response.success) {
-        console.error("로그인 실패:", response.message);
+      const response = await fetch("/api/auth/socialLogin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+      console.log("GoogleLoginUserAPI 응답:", data);
+
+      if (!data.success) {
+        console.error("로그인 실패:", data.message);
+      } else {
+        // 로그인 성공 시 리다이렉트 등 처리
+        route.push("/auth/login");
       }
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
