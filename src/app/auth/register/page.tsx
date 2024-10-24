@@ -2,17 +2,11 @@
 
 import AuthForm from "@/src/components/AuthForm/AuthForm";
 import { useAuthStore } from "@/src/store/auth/authStore";
-import { Field } from "@/src/types/authType";
-import {
-  isValidEmail,
-  isValidPassword,
-  isValidMessage,
-  isValidDisplayname,
-} from "@/src/utils/validation";
 import React, { useEffect, useState } from "react";
+import useAuthFields from "./data";
+import { RegisterValidateInputs } from "@/src/utils/validationInputs";
 
 const RegisterPage = () => {
-  const authStore = useAuthStore();
   const {
     name,
     email,
@@ -21,28 +15,21 @@ const RegisterPage = () => {
     displayName,
     message,
     reset,
-  } = authStore;
+  } = useAuthStore();
 
   const [isFormValid, setIsFormValid] = useState(false);
+  const fields = useAuthFields();
 
   useEffect(() => {
-    const validateInputs = () => {
-      const isDisplayNameValid = isValidDisplayname(displayName);
-      const isEmailValid = isValidEmail(email);
-      const isPasswordValid = isValidPassword(password);
-      const isMessageValid = isValidMessage(message);
-      const isPasswordMatch = password === confirmPassword;
-
-      return (
-        isDisplayNameValid &&
-        isEmailValid &&
-        isPasswordValid &&
-        isMessageValid &&
-        isPasswordMatch
-      );
-    };
-
-    setIsFormValid(validateInputs());
+    setIsFormValid(
+      RegisterValidateInputs(
+        displayName,
+        email,
+        password,
+        confirmPassword,
+        message
+      )
+    );
   }, [name, email, password, confirmPassword, displayName, message]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -76,51 +63,6 @@ const RegisterPage = () => {
       console.error("회원가입 중 오류 발생:", error);
     }
   };
-
-  const fields: Field[] = [
-    {
-      placeholder: "이름",
-      id: "name",
-      type: "text",
-      value: name,
-      onChange: (e) => authStore.setName(e.target.value),
-    },
-    {
-      placeholder: "닉네임",
-      id: "displayName",
-      type: "text",
-      value: displayName,
-      onChange: (e) => authStore.setDisplayName(e.target.value),
-    },
-    {
-      placeholder: "이메일",
-      id: "email",
-      type: "email",
-      value: email,
-      onChange: (e) => authStore.setEmail(e.target.value),
-    },
-    {
-      placeholder: "비밀번호",
-      id: "password",
-      type: "password",
-      value: password,
-      onChange: (e) => authStore.setPassword(e.target.value),
-    },
-    {
-      placeholder: "비밀번호 확인",
-      id: "confirmPassword",
-      type: "password",
-      value: confirmPassword,
-      onChange: (e) => authStore.setConfirmPassword(e.target.value),
-    },
-    {
-      placeholder: "인사말",
-      id: "message",
-      type: "text",
-      value: message,
-      onChange: (e) => authStore.setMessage(e.target.value),
-    },
-  ];
 
   return (
     <AuthForm

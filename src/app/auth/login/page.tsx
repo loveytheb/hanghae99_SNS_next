@@ -2,27 +2,22 @@
 
 import AuthForm from "@/src/components/AuthForm/AuthForm";
 import { useAuthStore } from "@/src/store/auth/authStore";
-import { Field } from "@/src/types/authType";
-import { isValidEmail, isValidPassword } from "@/src/utils/validation";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import useAuthFields from "./data";
+import { LoginValidateInputs } from "@/src/utils/validationInputs";
 
 const LoginPage = () => {
-  const authStore = useAuthStore();
   const { email, password, setIsLoggedIn, reset } = useAuthStore();
 
-  const validateInputs = () => {
-    const isEmailValid = isValidEmail(email);
-    const isPasswordValid = isValidPassword(password);
-    return isEmailValid && isPasswordValid;
-  };
+  const [isFormValid, setIsFormValid] = useState(false);
+  const fields = useAuthFields();
+
+  useEffect(() => {
+    setIsFormValid(LoginValidateInputs(email, password));
+  }, [email, password]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!validateInputs()) {
-      console.error("이메일 또는 비밀번호가 유효하지 않습니다.");
-      return;
-    }
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -46,25 +41,6 @@ const LoginPage = () => {
       console.error("로그인 중 오류 발생:", error);
     }
   };
-
-  const fields: Field[] = [
-    {
-      placeholder: "이메일",
-      id: "email",
-      type: "email",
-      value: email,
-      onChange: (e) => authStore.setEmail(e.target.value),
-    },
-    {
-      placeholder: "비밀번호",
-      id: "password",
-      type: "password",
-      value: password,
-      onChange: (e) => authStore.setPassword(e.target.value),
-    },
-  ];
-
-  const isFormValid = validateInputs();
 
   return (
     <AuthForm
