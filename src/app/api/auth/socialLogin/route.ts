@@ -9,7 +9,7 @@ export const POST = async (): Promise<NextResponse<googleLoginUserDTO>> => {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: "http://localhost:3000/auth/login",
+        redirectTo: "http://localhost:3000/",
         queryParams: {
           access_type: "offline",
           prompt: "consent",
