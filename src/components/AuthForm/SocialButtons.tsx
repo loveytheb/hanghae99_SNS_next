@@ -8,7 +8,7 @@ const SocialButtons: React.FC = () => {
   useEffect(() => {
     const fetchGoogleAuthListener = async () => {
       try {
-        const response = await fetch("/api/auth");
+        const response = await fetch("/");
         const data = await response.json();
         console.log("Auth listener response:", data.message);
         route.push("/auth/login");
@@ -34,7 +34,6 @@ const SocialButtons: React.FC = () => {
       if (!data.success) {
         console.error("로그인 실패:", data.message);
       } else {
-        // 로그인 성공 시 리다이렉트 등 처리
         route.push("/auth/login");
       }
     } catch (error) {
