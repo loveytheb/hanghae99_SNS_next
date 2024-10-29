@@ -1,15 +1,9 @@
 "use client";
 
-import { useAuthStore } from "@/src/store/auth/authStore";
 import { useRouter } from "next/navigation";
 
 const NonAuthMain = () => {
   const router = useRouter();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-
-  if (isLoggedIn) {
-    return null;
-  }
 
   return (
     <div className="flex h-screen items-center justify-center bg-gray-50">
