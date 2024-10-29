@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 export const SideBar: React.FC = () => {
   return (
@@ -54,7 +55,7 @@ export const SideBar: React.FC = () => {
 
       {/* User Profile */}
       <div className="flex items-center space-x-3 w-full pt-6 mt-auto border-t border-gray-200">
-        <img
+        <Image
           src="https://via.placeholder.com/48"
           alt="Profile Image"
           className="w-12 h-12 rounded-full"
