@@ -5,8 +5,10 @@ import { useAuthStore } from "@/src/store/auth/authStore";
 import React, { useEffect, useState } from "react";
 import useAuthFields from "./data";
 import { LoginValidateInputs } from "@/src/utils/validationInputs";
+import { useRouter } from "next/navigation";
 
 const LoginPage = () => {
+  const route = useRouter();
   const { email, password, setIsLoggedIn, reset } = useAuthStore();
 
   const [isFormValid, setIsFormValid] = useState(false);
@@ -26,6 +28,7 @@ const LoginPage = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -35,8 +38,9 @@ const LoginPage = () => {
       const data = await res.json();
 
       setIsLoggedIn(true);
-      reset();
       console.log("로그인 성공", data);
+      reset();
+      route.push("/");
     } catch (error) {
       console.error("로그인 중 오류 발생:", error);
     }

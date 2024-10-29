@@ -3,7 +3,6 @@ import supabase from "@/src/utils/supabase/supabase";
 import { IUser } from "@/src/types/authType";
 import { loginUserDTO } from "../../dtos/authDTO";
 
-// POST API: 로그인 처리
 export const POST = async (req: Request) => {
   try {
     const { email, password }: loginUserDTO = await req.json();
@@ -17,7 +16,7 @@ export const POST = async (req: Request) => {
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
 
-    if (!data.user) {
+    if (!data.user || !data.session) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
@@ -26,7 +25,16 @@ export const POST = async (req: Request) => {
       email: data.user.email ?? "",
     };
 
-    return NextResponse.json(user);
+    const response = NextResponse.json(user);
+    response.cookies.set("token", data.session.access_token, {
+      httpOnly: false, // 클라이언트에서 접근할 수 있도록 false로 설정
+      secure: false, // 로컬 개발 시 false로 설정
+      maxAge: 60 * 60 * 24,
+      path: "/",
+      sameSite: "lax",
+    });
+
+    return response;
   } catch (error) {
     return NextResponse.json(
       { message: "Unexpected error: " + error },

@@ -11,7 +11,7 @@ export const SideBar: React.FC = () => {
       {/* Navigation Links */}
       <div className="flex flex-col space-y-4 w-full">
         <a
-          href="#"
+          href="/"
           className="flex items-center space-x-4 text-gray-700 hover:text-gray-500"
         >
           <i className="fas fa-home text-xl"></i>
