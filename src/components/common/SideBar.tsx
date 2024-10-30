@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { shouldShowSidebar } from "@/src/utils/checkRoutes";
 
 interface SideBarProps {
@@ -10,6 +9,7 @@ interface SideBarProps {
 }
 
 export const SideBar: React.FC<SideBarProps> = ({ isAuthenticated }) => {
+  const route = useRouter();
   const pathname = usePathname();
 
   if (!shouldShowSidebar(pathname, isAuthenticated)) {
@@ -63,18 +63,15 @@ export const SideBar: React.FC<SideBarProps> = ({ isAuthenticated }) => {
       </div>
 
       {/* Button */}
-      <button className="w-full bg-black hover:bg-gray-700 text-white py-2 rounded-full font-semibold text-lg mt-4">
+      <button
+        onClick={() => route.push("/posts/write")}
+        className="w-full bg-black hover:bg-gray-700 text-white py-2 rounded-full font-semibold text-lg mt-4"
+      >
         게시하기
       </button>
 
       {/* User Profile */}
       <div className="flex items-center space-x-3 w-full pt-6 mt-auto border-t border-gray-200">
-        <Image
-          src="/images/defult_profile_image.png"
-          alt="Profile Image"
-          width={48}
-          height={48}
-        />
         <div className="flex-1">
           <p className="text-gray-800 font-semibold">display name</p>
           <p className="text-gray-500 text-sm">email</p>

@@ -23,12 +23,13 @@ export const POST = async (req: Request) => {
     const user: IUser = {
       id: data.user.id,
       email: data.user.email ?? "",
+      display_name: data.user.user_metadata?.display_name ?? "",
     };
 
     const response = NextResponse.json(user);
     response.cookies.set("token", data.session.access_token, {
-      httpOnly: false, // 클라이언트에서 접근할 수 있도록 false로 설정
-      secure: false, // 로컬 개발 시 false로 설정
+      httpOnly: false,
+      secure: false,
       maxAge: 60 * 60 * 24,
       path: "/",
       sameSite: "lax",
