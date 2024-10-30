@@ -37,8 +37,13 @@ const LoginPage = () => {
 
       const data = await res.json();
 
+      console.log("로그인 정보:", {
+        display_name: data.display_name,
+        email: data.email,
+        id: data.id,
+      });
+
       setIsLoggedIn(true);
-      console.log("로그인 성공", data);
       reset();
       route.push("/");
     } catch (error) {
