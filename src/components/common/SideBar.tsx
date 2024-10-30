@@ -1,7 +1,21 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { shouldShowSidebar } from "@/src/utils/checkRoutes";
 
-export const SideBar: React.FC = () => {
+interface SideBarProps {
+  isAuthenticated: boolean;
+}
+
+export const SideBar: React.FC<SideBarProps> = ({ isAuthenticated }) => {
+  const pathname = usePathname();
+
+  if (!shouldShowSidebar(pathname, isAuthenticated)) {
+    return null;
+  }
+
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col px-4 py-6">
       {/* Logo */}
@@ -56,9 +70,10 @@ export const SideBar: React.FC = () => {
       {/* User Profile */}
       <div className="flex items-center space-x-3 w-full pt-6 mt-auto border-t border-gray-200">
         <Image
-          src="https://via.placeholder.com/48"
+          src="/images/defult_profile_image.png"
           alt="Profile Image"
-          className="w-12 h-12 rounded-full"
+          width={48}
+          height={48}
         />
         <div className="flex-1">
           <p className="text-gray-800 font-semibold">display name</p>
