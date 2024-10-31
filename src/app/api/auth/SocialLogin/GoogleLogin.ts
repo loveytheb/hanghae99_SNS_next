@@ -1,12 +1,10 @@
-import { NextResponse } from "next/server";
 import supabase from "@/src/utils/supabase/supabase";
-import { googleLoginUserDTO } from "../../dtos/authDTO";
 import { DEFAULT_PROFILE_IMAGE_URL } from "@/src/constants/constants";
+import { googleLoginUserDTO } from "../../dtos/authDTO";
 
-// 구글 로그인 API
-export const POST = async (): Promise<NextResponse<googleLoginUserDTO>> => {
+export const GoogleLoginUserAPI = async (): Promise<googleLoginUserDTO> => {
   try {
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error: loginError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: "http://localhost:3000/",
@@ -17,72 +15,96 @@ export const POST = async (): Promise<NextResponse<googleLoginUserDTO>> => {
       },
     });
 
-    if (error) {
-      return NextResponse.json({
+    if (loginError) {
+      return {
         success: false,
-        message: error.message || "구글 로그인에 실패했습니다.",
-      });
+        message: loginError.message || "구글 로그인에 실패했습니다.",
+      };
     }
 
-    const { data } = await supabase.auth.getSession();
-    const user = data.session?.user;
+    // 세션 준비 확인
+    let attempts = 0;
+    const maxAttempts = 10;
+    let sessionData;
 
-    if (!user) {
-      return NextResponse.json({
+    while (attempts < maxAttempts) {
+      const { data, error } = await supabase.auth.getSession();
+
+      if (!error && data.session?.user) {
+        sessionData = data;
+        break;
+      }
+
+      attempts++;
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+
+    if (!sessionData) {
+      return {
         success: false,
         message: "사용자 정보를 가져오지 못했습니다.",
-      });
+      };
     }
 
-    const { data: existingUser } = await supabase
+    const user = sessionData.session.user;
+
+    const { data: existingUser, error: userCheckError } = await supabase
       .from("users_info")
       .select("*")
       .eq("id", user.id)
       .single();
 
+    if (userCheckError && userCheckError.code !== "PGRST116") {
+      return {
+        success: false,
+        message:
+          "사용자 정보를 확인하는 데 실패했습니다: " + userCheckError.message,
+      };
+    }
+
     if (existingUser) {
       const { error: updateError } = await supabase
         .from("users_info")
         .update({
-          display_name: user.user_metadata.full_name,
-          profile_image: DEFAULT_PROFILE_IMAGE_URL,
+          display_name:
+            user.user_metadata.full_name || existingUser.display_name,
         })
         .eq("id", user.id);
 
       if (updateError) {
-        return NextResponse.json({
+        return {
           success: false,
           message:
             "사용자 정보를 업데이트하는 데 실패했습니다: " +
             updateError.message,
-        });
+        };
       }
     } else {
       const { error: insertError } = await supabase.from("users_info").insert([
         {
           id: user.id,
-          display_name: user.user_metadata.full_name,
+          display_name: user.user_metadata.full_name || "익명 사용자",
           profile_image: DEFAULT_PROFILE_IMAGE_URL,
         },
       ]);
 
       if (insertError) {
-        return NextResponse.json({
+        return {
           success: false,
           message:
             "사용자 정보를 저장하는 데 실패했습니다: " + insertError.message,
-        });
+        };
       }
     }
 
-    return NextResponse.json({
+    return {
       success: true,
       message: "구글 로그인에 성공하였습니다.",
-    });
+    };
   } catch (error) {
-    return NextResponse.json({
+    return {
       success: false,
       message: "Unexpected error: " + (error as Error).message,
-    });
+    };
   }
 };
