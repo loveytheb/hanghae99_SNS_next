@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { SideBar } from "../common/SideBar";
+import Cookies from "js-cookie";
 
 export default function AuthenticatedLayout({
   children,
@@ -11,10 +12,7 @@ export default function AuthenticatedLayout({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+    const token = Cookies.get("token");
     setIsAuthenticated(!!token);
   }, []);
 

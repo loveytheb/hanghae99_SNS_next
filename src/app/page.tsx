@@ -4,16 +4,15 @@ import { useEffect, useState } from "react";
 import NonAuthMain from "../components/main/guest/NonAuthMain";
 import { SideBar } from "../components/common/SideBar";
 import AuthMain from "../components/main/user/AuthMain";
+import Cookies from "js-cookie";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      ?.split("=")[1];
+    const token = Cookies.get("token");
+    console.log("Token from Cookies:", token);
     setIsAuthenticated(!!token);
     setIsLoading(false);
   }, []);
@@ -23,16 +22,10 @@ const Home = () => {
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="flex w-full max-w-screen-lg mx-auto gap-x-8">
-        {isAuthenticated && (
-          <div className="w-64">
-            <SideBar isAuthenticated={isAuthenticated} />
-          </div>
-        )}
-        <main className="flex-1">
-          {isAuthenticated ? <AuthMain /> : <NonAuthMain />}
-        </main>
+    <div className="flex">
+      {isAuthenticated && <SideBar isAuthenticated={isAuthenticated} />}
+      <div className={`flex-1 ${isAuthenticated ? "ml-64" : ""}`}>
+        {isAuthenticated ? <AuthMain /> : <NonAuthMain />}
       </div>
     </div>
   );
