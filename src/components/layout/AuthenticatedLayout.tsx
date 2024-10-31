@@ -19,11 +19,15 @@ export default function AuthenticatedLayout({
   }, []);
 
   return (
-    <div className="flex">
-      {isAuthenticated && <SideBar isAuthenticated={isAuthenticated} />}
-      <main className={`flex-1 ${isAuthenticated ? "ml-64" : ""}`}>
-        {children}
-      </main>
+    <div className="flex justify-center">
+      <div className="flex w-full max-w-screen-lg mx-auto gap-x-8">
+        {isAuthenticated && (
+          <div className="w-64">
+            <SideBar isAuthenticated={isAuthenticated} />
+          </div>
+        )}
+        <main className="flex-1">{children}</main>
+      </div>
     </div>
   );
 }

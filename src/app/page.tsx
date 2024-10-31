@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import NonAuthMain from "../components/guest/NonAuthMain";
+import NonAuthMain from "../components/main/guest/NonAuthMain";
 import { SideBar } from "../components/common/SideBar";
+import AuthMain from "../components/main/user/AuthMain";
 
 const Home = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -22,14 +23,16 @@ const Home = () => {
   }
 
   return (
-    <div className="flex">
-      {isAuthenticated && <SideBar isAuthenticated={isAuthenticated} />}
-      <div className={`flex-1 ${isAuthenticated ? "ml-64" : ""}`}>
-        {isAuthenticated ? (
-          <h1 className="text-2xl">로그인 전용 화면입니다.</h1>
-        ) : (
-          <NonAuthMain />
+    <div className="flex justify-center">
+      <div className="flex w-full max-w-screen-lg mx-auto gap-x-8">
+        {isAuthenticated && (
+          <div className="w-64">
+            <SideBar isAuthenticated={isAuthenticated} />
+          </div>
         )}
+        <main className="flex-1">
+          {isAuthenticated ? <AuthMain /> : <NonAuthMain />}
+        </main>
       </div>
     </div>
   );
