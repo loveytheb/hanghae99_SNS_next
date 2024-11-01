@@ -1,6 +1,9 @@
+import Cookies from "js-cookie";
+
 const API_URLS = {
   login: "/api/auth/login",
   register: "/api/auth/register",
+  writePost: "api/posts/write",
 };
 
 export interface FetchOptions {
@@ -12,9 +15,10 @@ export interface FetchOptions {
 
 export const fetchModule = async (
   urlKey: keyof typeof API_URLS,
-  { method = "GET", headers = {}, body, token }: FetchOptions
+  { method = "GET", headers = {}, body }: FetchOptions
 ) => {
   const url = API_URLS[urlKey];
+  const token = Cookies.get("token");
 
   const defaultHeaders: Record<string, string> = {
     "Content-Type": "application/json",

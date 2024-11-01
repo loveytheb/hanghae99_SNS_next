@@ -5,7 +5,7 @@ const WritePost = () => {
     <div className="w-full mb-4">
       <div className="flex space-x-3">
         <Image
-          src="https://via.placeholder.com/40"
+          src="/images/default_profile_image.png"
           alt="User Avatar"
           width={40}
           height={40}
