@@ -1,10 +1,13 @@
+import Image from "next/image";
+
 const PostList = () => (
   <div className="border-t border-gray-300 py-4">
     <div className="flex space-x-3">
-      <img
+      <Image
         src="https://via.placeholder.com/40"
-        className="w-10 h-10 rounded-full"
         alt="User Avatar"
+        width={40}
+        height={40}
       />
       <div>
         <p className="text-gray-800 font-semibold">

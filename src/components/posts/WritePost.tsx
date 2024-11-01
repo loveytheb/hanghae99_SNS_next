@@ -1,11 +1,14 @@
+import Image from "next/image";
+
 const WritePost = () => {
   return (
     <div className="w-full mb-4">
       <div className="flex space-x-3">
-        <img
+        <Image
           src="https://via.placeholder.com/40"
-          className="w-10 h-10 rounded-full"
           alt="User Avatar"
+          width={40}
+          height={40}
         />
         <div className="w-full">
           <input

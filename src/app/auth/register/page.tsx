@@ -41,13 +41,13 @@ const RegisterPage = () => {
     try {
       const data = await fetchModule("register", {
         method: "POST",
-        body: {
+        body: JSON.stringify({
           name,
           email,
           password,
           display_name: displayName,
           message,
-        },
+        }),
       });
 
       console.log("회원가입 성공:", data);

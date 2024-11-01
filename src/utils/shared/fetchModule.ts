@@ -6,7 +6,7 @@ const API_URLS = {
 export interface FetchOptions {
   method?: "GET" | "POST";
   headers?: Record<string, string>;
-  body?: any;
+  body?: string | undefined;
   token?: string;
 }
 

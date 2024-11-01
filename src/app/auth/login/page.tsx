@@ -25,7 +25,7 @@ const LoginPage = () => {
     try {
       const data = await fetchModule("login", {
         method: "POST",
-        body: { email, password },
+        body: JSON.stringify({ email, password }),
       });
 
       console.log("로그인 정보:", {
