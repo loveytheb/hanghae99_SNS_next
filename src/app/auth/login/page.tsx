@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import useAuthFields from "./data";
 import { LoginValidateInputs } from "@/src/utils/validationInputs";
 import { useRouter } from "next/navigation";
+import { fetchModule } from "@/src/utils/shared/fetchModule";
 
 const LoginPage = () => {
   const route = useRouter();
@@ -22,20 +23,10 @@ const LoginPage = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const data = await fetchModule("login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-        credentials: "include",
+        body: { email, password },
       });
-
-      if (!res.ok) {
-        throw new Error("로그인 실패");
-      }
-
-      const data = await res.json();
 
       console.log("로그인 정보:", {
         display_name: data.display_name,

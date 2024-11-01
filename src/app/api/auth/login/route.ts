@@ -27,13 +27,13 @@ export const POST = async (req: Request) => {
     };
 
     const response = NextResponse.json(user);
-    response.cookies.set("token", data.session.access_token, {
-      httpOnly: false,
-      secure: false,
-      maxAge: 60 * 60 * 24,
-      path: "/",
-      sameSite: "lax",
-    });
+
+    response.headers.set(
+      "Set-Cookie",
+      `token=${data.session.access_token}; Path=/; Max-Age=${
+        60 * 60 * 24
+      }; SameSite=Lax` // HttpOnly 옵션 제거
+    );
 
     return response;
   } catch (error) {

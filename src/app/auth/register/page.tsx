@@ -5,8 +5,11 @@ import { useAuthStore } from "@/src/store/auth/authStore";
 import React, { useEffect, useState } from "react";
 import useAuthFields from "./data";
 import { RegisterValidateInputs } from "@/src/utils/validationInputs";
+import { fetchModule } from "@/src/utils/shared/fetchModule";
+import { useRouter } from "next/navigation";
 
 const RegisterPage = () => {
+  const route = useRouter();
   const {
     name,
     email,
@@ -36,29 +39,20 @@ const RegisterPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/auth/register", {
+      const data = await fetchModule("register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+        body: {
           name,
           email,
           password,
           display_name: displayName,
           message,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error("Error:", errorData.message);
-        return;
-      }
-
-      const data = await response.json();
       console.log("회원가입 성공:", data);
       reset();
+      route.push("/auth/login");
     } catch (error) {
       console.error("회원가입 중 오류 발생:", error);
     }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Cookies from "js-cookie";
 
 const WritePostPage = () => {
   const [title, setTitle] = useState("");
@@ -10,10 +11,7 @@ const WritePostPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const cookies = document.cookie.split("; ");
-    const token = cookies
-      .find((cookie) => cookie.startsWith("token="))
-      ?.split("=")[1];
+    const token = Cookies.get("token");
 
     if (!token) {
       alert("로그인이 필요합니다.");
