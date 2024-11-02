@@ -1,13 +1,13 @@
 import { useState } from "react";
 import Image from "next/image";
+import { usePostStore } from "@/src/store/post/postStore";
 
 interface WritePostFormProps {
   onSubmit: (title: string, content: string) => Promise<void>;
 }
 
 const WritePostForm: React.FC<WritePostFormProps> = ({ onSubmit }) => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const { title, content, setTitle, setContent, reset } = usePostStore();
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -15,8 +15,7 @@ const WritePostForm: React.FC<WritePostFormProps> = ({ onSubmit }) => {
 
     try {
       await onSubmit(title, content);
-      setTitle("");
-      setContent("");
+      reset();
       alert("게시글이 성공적으로 작성되었습니다!");
     } catch (error) {
       console.error("게시글 작성 중 오류가 발생했습니다.", error);
@@ -37,10 +36,14 @@ const WritePostForm: React.FC<WritePostFormProps> = ({ onSubmit }) => {
           <input
             className="w-full p-2 border border-gray-300 rounded-lg resize-none"
             placeholder="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <textarea
             className="w-full p-2 border border-gray-300 rounded-lg resize-none"
             placeholder="content"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
           />
         </div>
       </div>
