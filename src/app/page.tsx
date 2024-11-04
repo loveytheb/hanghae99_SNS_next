@@ -5,17 +5,18 @@ import NonAuthMain from "../components/main/guest/NonAuthMain";
 import { SideBar } from "../components/common/SideBar";
 import AuthMain from "../components/main/user/AuthMain";
 import Cookies from "js-cookie";
+import { useAuthStore } from "../store/auth/authStore";
 
 const Home = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isLoggedIn, setIsLoggedIn } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const token = Cookies.get("token");
-    console.log("Token from Cookies:", token);
-    setIsAuthenticated(!!token);
+
+    setIsLoggedIn(!!token);
     setIsLoading(false);
-  }, []);
+  }, [setIsLoggedIn]);
 
   if (isLoading) {
     return null;
@@ -23,9 +24,9 @@ const Home = () => {
 
   return (
     <div className="flex">
-      {isAuthenticated && <SideBar isAuthenticated={isAuthenticated} />}
-      <div className={`flex-1 ${isAuthenticated ? "ml-64" : ""}`}>
-        {isAuthenticated ? <AuthMain /> : <NonAuthMain />}
+      {isLoggedIn && <SideBar />}
+      <div className={`flex-1 ${isLoggedIn ? "ml-64" : ""}`}>
+        {isLoggedIn ? <AuthMain /> : <NonAuthMain />}
       </div>
     </div>
   );
