@@ -1,20 +1,12 @@
 "use client";
 
 import React from "react";
-import { usePathname, useRouter } from "next/navigation";
-import { shouldShowSidebar } from "@/src/utils/checkRoutes";
+import { useRouter } from "next/navigation";
 
-interface SideBarProps {
-  isAuthenticated: boolean;
-}
+interface SideBarProps {}
 
-export const SideBar: React.FC<SideBarProps> = ({ isAuthenticated }) => {
+export const SideBar: React.FC<SideBarProps> = () => {
   const route = useRouter();
-  const pathname = usePathname();
-
-  if (!shouldShowSidebar(pathname, isAuthenticated)) {
-    return null;
-  }
 
   return (
     <div className="w-64 h-screen bg-white border-r border-gray-200 flex flex-col px-4 py-6">
