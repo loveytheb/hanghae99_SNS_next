@@ -4,6 +4,7 @@ const API_URLS = {
   login: "/api/auth/login",
   register: "/api/auth/register",
   writePost: "/api/posts/write",
+  listPost: "api/posts",
 };
 
 export interface FetchOptions {
