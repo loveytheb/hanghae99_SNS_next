@@ -10,7 +10,7 @@ const API_URLS = {
 export interface FetchOptions {
   method?: "GET" | "POST";
   headers?: Record<string, string>;
-  body?: FormData | string | null;
+  body?: FormData | string | null | Record<string, string>;
 }
 
 export const fetchModule = async (
