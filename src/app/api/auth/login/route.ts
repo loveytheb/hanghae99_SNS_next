@@ -16,8 +16,12 @@ export const POST = async (req: Request) => {
       return NextResponse.json({ message: error.message }, { status: 400 });
     }
 
-    if (!data.user || !data.session) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    if (!data || !data.user || !data.session) {
+      // 에러나 데이터 누락 시의 응답을 명확하게 지정
+      return NextResponse.json(
+        { message: "Authentication failed" },
+        { status: 401 }
+      );
     }
 
     const user: IUser = {
@@ -32,13 +36,14 @@ export const POST = async (req: Request) => {
       "Set-Cookie",
       `token=${data.session.access_token}; Path=/; Max-Age=${
         60 * 60 * 24
-      }; SameSite=Lax` // HttpOnly 옵션 제거
+      }; SameSite=Lax`
     );
 
     return response;
   } catch (error) {
+    console.error("Unexpected server error:", error); // 콘솔에 상세 오류 기록
     return NextResponse.json(
-      { message: "Unexpected error: " + error },
+      { message: `Unexpected error: ${String(error)}` }, // 에러 객체를 문자열로 변환
       { status: 500 }
     );
   }
