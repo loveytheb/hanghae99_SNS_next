@@ -56,12 +56,15 @@ const WritePostForm: React.FC<WritePostFormProps> = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit} className="w-full mb-4">
       <div className="flex space-x-3">
-        <Image
-          src="/images/default_profile_image.png"
-          alt="User Avatar"
-          width={40}
-          height={40}
-        />
+        <div className="w-10 h-10 overflow-hidden rounded-full">
+          <Image
+            src="/images/default_profile_image.png"
+            alt="User Avatar"
+            priority
+            width={40}
+            height={40}
+          />
+        </div>
         <div className="w-full">
           <input
             className="w-full p-2 border border-gray-300 rounded-lg resize-none"

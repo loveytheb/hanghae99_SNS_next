@@ -37,12 +37,11 @@ export const fetchModule = async (
   try {
     const response = await fetch(url, {
       method,
-      headers: isFormData ? undefined : defaultHeaders,
-      body: isFormData ? body : JSON.stringify(body),
+      headers: defaultHeaders,
+      body: isFormData ? (body as FormData) : JSON.stringify(body),
       credentials: "include",
     });
 
-    // JSON 형식인지 검사
     const contentType = response.headers.get("content-type") || "";
     const isJson = contentType.includes("application/json");
 

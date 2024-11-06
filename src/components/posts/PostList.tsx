@@ -50,7 +50,7 @@ const PostList = () => {
                 "/images/default_profile_image.png"
               }
               alt="User Avatar"
-              layout="responsive"
+              priority
               width={40}
               height={40}
             />
