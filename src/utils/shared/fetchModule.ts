@@ -17,7 +17,7 @@ export const fetchModule = async (
   urlKey: keyof typeof API_URLS,
   { method = "GET", headers = {}, body }: FetchOptions
 ) => {
-  const url = API_URLS[urlKey];
+  let url = API_URLS[urlKey];
   const token = Cookies.get("token");
 
   const defaultHeaders: Record<string, string> = {
@@ -34,11 +34,22 @@ export const fetchModule = async (
     defaultHeaders["Content-Type"] = "application/json";
   }
 
+  // GET 요청일 때 쿼리 파라미터를 URL에 추가
+  if (method === "GET" && body && typeof body === "object") {
+    const queryParams = new URLSearchParams(body as Record<string, string>);
+    url += `?${queryParams.toString()}`;
+  }
+
   try {
     const response = await fetch(url, {
       method,
       headers: defaultHeaders,
-      body: isFormData ? (body as FormData) : JSON.stringify(body),
+      body:
+        method !== "GET"
+          ? isFormData
+            ? (body as FormData)
+            : JSON.stringify(body)
+          : undefined,
       credentials: "include",
     });
 
@@ -55,7 +66,6 @@ export const fetchModule = async (
       }
     }
 
-    // 정상적인 JSON 응답일 때만 파싱
     return isJson ? await response.json() : null;
   } catch (error) {
     console.error("API 요청 중 오류 발생: ", error);
